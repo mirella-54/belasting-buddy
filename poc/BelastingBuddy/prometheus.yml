@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  # 1. Kafka JMX Exporter
+  - job_name: 'kafka-broker-jmx'
+    static_configs:
+      - targets: ['kafka-jmx-exporter:5556']
+    metrics_path: /metrics
+    params:
+      target: ['service:jmx:rmi:///jndi/rmi://kafka:5555/jmxrmi']
+      
+  # 2. Document Processing Service
+  - job_name: 'doc-processor-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['doc-processing-service:8082']
+      
+  # 3. Kafka Exporter 
+  - job_name: 'kafka-exporter-lag'
+    static_configs:
+      - targets: ['kafka-exporter:9308']

@@ -1,0 +1,157 @@
+type: collection.insomnia.rest/5.0
+name: User Management Service
+meta:
+  id: wrk_e93115cd4f5940899305104f8665f9f5
+  created: 1758553722904
+  modified: 1758553722904
+  description: ""
+collection:
+  - url: http://localhost:8080/api/auth/register
+    name: Register User
+    meta:
+      id: req_c0f08e2bad8347e494f7ccb8f846ae0a
+      created: 1758553722908
+      modified: 1758562896590
+      isPrivate: false
+      description: ""
+      sortKey: -1758553722908
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "username": "vic2",
+          "email": "bs2",
+          "password": "1"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/auth/login
+    name: Login User
+    meta:
+      id: req_ebca5863f4f64f97be68065c07f508df
+      created: 1758553722910
+      modified: 1758562953595
+      isPrivate: false
+      description: ""
+      sortKey: -1758553722910
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "username": "vic",
+          "password": "1"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/admin/users
+    name: List Users (Admin)
+    meta:
+      id: req_d3f5eb054bd4492692bceaaf98291781
+      created: 1758553722911
+      modified: 1758562946567
+      isPrivate: false
+      description: ""
+      sortKey: -1758553722911
+    method: GET
+    headers:
+      - name: Authorization
+        value: Bearer
+          {{"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljZTIiLCJpYXQiOjE3NTg1NjI5MzEsImV4cCI6MTc1ODY0OTMzMX0.LmPbCxIbUCOD7W5YewgbBmZzjPAMEd_0EiUS0ecyJkI"}}
+        id: pair_46971a7c89554a2e914f5f1d77b3ea11
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/admin/users/vic2
+    name: Delete User (Admin)
+    meta:
+      id: req_63ce03cd15e34c07a43fa9582fd8d445
+      created: 1758553722912
+      modified: 1758563561864
+      isPrivate: false
+      description: ""
+      sortKey: -1758553722912
+    method: DELETE
+    headers:
+      - name: Authorization
+        value: Bearer
+          {{"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2aWMiLCJpYXQiOjE3NTg1NjM1MjEsImV4cCI6MTc1ODY0OTkyMX0.i981EJMn1SG3glECEylFDtHFLLwErQvsnP6kQseUxFQ"}}
+        id: pair_aa3137246bba4f83b6192cd03bfe4b7a
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/admin/users
+    name: List Users (Admin but not admin)
+    meta:
+      id: req_8fd0b49e8c534308bbae77d4561abc5a
+      created: 1758562967144
+      modified: 1758562967144
+      isPrivate: false
+      description: ""
+      sortKey: -1758553722910.5
+    method: GET
+    headers:
+      - name: Authorization
+        value: Bearer
+          {{"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljZTIiLCJpYXQiOjE3NTg1NjI5MzEsImV4cCI6MTc1ODY0OTMzMX0.LmPbCxIbUCOD7W5YewgbBmZzjPAMEd_0EiUS0ecyJkI"}}
+        id: pair_46971a7c89554a2e914f5f1d77b3ea11
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_63e1d06dd75e217f645b37d827a384ee189eafda
+    created: 1758553722918
+    modified: 1758563512620
+  cookies:
+    - key: JSESSIONID
+      value: 1E76FC8F82A155214F0CDC2D7172502C
+      domain: localhost
+      path: /
+      httpOnly: true
+      hostOnly: true
+      creation: 2025-09-22T15:08:55.222Z
+      lastAccessed: 2025-09-22T17:51:52.620Z
+      id: ce48eb19-4948-4179-9eb9-88506961c9e8
+environments:
+  name: Base Environment
+  meta:
+    id: env_63e1d06dd75e217f645b37d827a384ee189eafda
+    created: 1758553722914
+    modified: 1758553722914
+    isPrivate: false

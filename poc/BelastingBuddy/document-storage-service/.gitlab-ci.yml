@@ -1,0 +1,55 @@
+image: maven:3.8.1-openjdk-17-slim
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  SERVICE_DIR: "poc/BelastingBuddy/document-storage-service"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .m2/repository
+    
+
+build_document-storage-service:
+  stage: build
+  variables:
+    SERVICE_DIR: "poc/BelastingBuddy/document-storage-service"
+  script:
+    - cd $SERVICE_DIR
+    - mvn clean compile
+  artifacts:
+    paths:
+      - $SERVICE_DIR/target/
+
+test_document-storage-service:
+  stage: test
+  variables:
+    SERVICE_DIR: "poc/BelastingBuddy/document-storage-service"
+  script:
+    - echo "$SERVICE_DIR"
+    - RESOURCES_DIR="$CI_PROJECT_DIR/$SERVICE_DIR/src/main/resources" 
+    - mkdir -p $RESOURCES_DIR
+    - echo "$GCP_SERVICE_KEY_B64" | base64 -d > "$RESOURCES_DIR/firebase-service-account.json"
+    - echo "PROJECT_AREA=$PROJECT_AREA" > "$SERVICE_DIR/.env"
+    - echo "PROJECT_KEY=$PROJECT_KEY" >> "$SERVICE_DIR/.env"
+    - echo "PROJECT_KMS=$PROJECT_KMS" >> "$SERVICE_DIR/.env"
+    - echo "PROJECT_NAME=$PROJECT_NAME" >> "$SERVICE_DIR/.env"
+    - export GOOGLE_APPLICATION_CREDENTIALS="$RESOURCES_DIR/firebase-service-account.json"
+    - ls -R "$SERVICE_DIR/src/test/java"
+    - cd "$SERVICE_DIR"
+    - mvn -X test
+  artifacts:
+    when: always
+    reports:
+      junit: $SERVICE_DIR/target/surefire-reports/*.xml
+    paths:
+      - $SERVICE_DIR/target/surefire-reports/
+
+checkstyle_document-storage-service:
+  stage: checkstyle
+  variables:
+    SERVICE_DIR: "poc/BelastingBuddy/document-storage-service"
+  script:
+    - cd $SERVICE_DIR
+    - mvn checkstyle:check
+  allow_failure: false

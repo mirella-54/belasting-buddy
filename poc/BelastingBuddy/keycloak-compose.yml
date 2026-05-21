@@ -1,0 +1,62 @@
+# keycloak-compose.yml
+# RUN BEFORE THE BIG COMPOSE (if no keycloak in big compose):
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    volumes:
+      - kc-pg:/var/lib/postgresql/data
+    networks: [idp-net]
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.2
+    container_name: keycloak
+    depends_on:
+      - postgres
+    command: >
+      start-dev --import-realm
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_DB_SCHEMA: public
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_LOG_LEVEL: info
+      KC_HOSTNAME: keycloak
+      KC_HOSTNAME_PORT: 8080
+      KC_PROXY: edge
+
+    volumes:
+      - ./keycloak/realms:/opt/keycloak/data/import
+    ports:
+      - "8080:8080"
+    networks: [idp-net]
+
+  kc-setup:
+    image: quay.io/keycloak/keycloak:26.0.2
+    entrypoint: ["/bin/sh","-c"]
+    command: >
+      set -e;
+      until curl -fsS http://keycloak:8080/health/ready >/dev/null; do
+        echo "waiting for keycloak..."; sleep 2;
+      done;
+      /opt/keycloak/bin/kcadm.sh config credentials --server http://keycloak:8080 \
+        --realm master --user ${KC_BOOTSTRAP_ADMIN_USERNAME:-admin} --password ${KC_BOOTSTRAP_ADMIN_PASSWORD:-admin};
+      CID=$(/opt/keycloak/bin/kcadm.sh get clients -r users -q clientId=user-management --fields id --format csv --noquotes);
+      SA_USER=$(/opt/keycloak/bin/kcadm.sh get clients/$CID/service-account-user -r users --fields username --format csv --noquotes);
+      /opt/keycloak/bin/kcadm.sh add-roles -r users --uusername "$SA_USER" \
+        --cclientid realm-management --rolename manage-users --rolename view-users;
+      echo "Assigned realm-management roles to $SA_USER";
+    networks: [idp-net]
+
+volumes:
+  kc-pg:
+
+networks:
+  idp-net:
+    name: idp-net

@@ -1,0 +1,19 @@
+app:
+  keycloak:
+    users:
+      jwks: http://localhost/dummy-users-jwks
+    services:
+      jwks: http://localhost/dummy-services-jwks
+      token-url: http://localhost/dummy-token
+      client-id: dummy-client
+      client-secret: dummy-secret
+      realm: dummy-realm
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost/dummy-issuer

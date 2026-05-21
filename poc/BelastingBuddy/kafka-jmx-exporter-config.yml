@@ -1,0 +1,9 @@
+# kafka-jmx-exporter-config.yml
+---
+startDelaySeconds: 0
+metricsPath: /metrics
+listenHost: 0.0.0.0
+listenPort: 5556 # Prometheus JMX Exporter Port
+whitelistObjectNames:
+- "kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec,*"
+- "kafka.server:type=ReplicaManager,name=UnderReplicatedPartitions"

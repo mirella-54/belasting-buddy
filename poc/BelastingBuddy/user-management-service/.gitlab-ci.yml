@@ -1,0 +1,44 @@
+image: maven:3.8.1-openjdk-17-slim
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  SERVICE_DIR: "poc/BelastingBuddy/user-management-service"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .m2/repository
+
+build_user-management-service:
+  stage: build
+  variables:
+    SERVICE_DIR: "poc/BelastingBuddy/user-management-service"
+  script:
+    - cd $SERVICE_DIR
+    - mvn clean compile
+  artifacts:
+    paths:
+      - $SERVICE_DIR/target/
+
+test_user-management-service:
+  stage: test
+  variables:
+    SERVICE_DIR: "poc/BelastingBuddy/user-management-service"
+  script:
+    - cd $SERVICE_DIR
+    - mvn test
+  artifacts:
+    when: always
+    reports:
+      junit: $SERVICE_DIR/target/surefire-reports/*.xml
+    paths:
+      - $SERVICE_DIR/target/surefire-reports/
+
+checkstyle_user-management-service:
+  stage: checkstyle
+  variables:
+    SERVICE_DIR: "poc/BelastingBuddy/user-management-service"
+  script:
+    - cd $SERVICE_DIR
+    - mvn checkstyle:check
+  allow_failure: false

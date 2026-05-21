@@ -1,0 +1,9 @@
+app:
+  keycloak:
+    users:
+      jwks: ${APP_KEYCLOAK_USERS_JWKS:http://localhost/dummy-jwks}
+    services:
+      jwks: ${APP_KEYCLOAK_SERVICES_JWKS:http://localhost/dummy-jwks}
+      token-url: ${APP_KEYCLOAK_SERVICES_TOKEN_URL:http://localhost/dummy-token}
+      client-id: ${APP_KEYCLOAK_SERVICES_CLIENT_ID:test-client}
+      client-secret: ${APP_KEYCLOAK_SERVICES_CLIENT_SECRET:test-secret}
