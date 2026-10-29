@@ -48,7 +48,7 @@ services:
     
   # 3. Dedicated JMX Exporter (Sidecar for Kafka) - FIXED
   kafka-jmx-exporter:
-    image: bitnami/jmx-exporter:latest
+    image: soldevelo/jmx-exporter:latest
     container_name: kafka-jmx-exporter
     ports:
       - "5556:5556"
